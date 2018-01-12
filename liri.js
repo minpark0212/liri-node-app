@@ -1,8 +1,8 @@
 
 var keys = require("./keys.js");
 
-var twitter = require('twitter');
-var spotify = require('spotify');
+var Twitter = require('twitter');
+var Spotify = require('node-spotify-api');
 var request = require('request');
 var omdb = require('omdb');
 
@@ -11,10 +11,20 @@ var fs = require('fs');
 var commandInput = process.argv[2];
 var commandName = process.argv[3];
 
-var defaultSong = "The Sign"
-var defaultMovie = "Mr. Nobody"
+var defaultSong = "The Sign";
+var defaultMovie = "Mr.Nobody";
 
-var client = new twitter(keys.twitterKeys);
+var client = new Twitter({
+	consumer_key: keys.consumer_key,
+	consumer_secret: keys.consumer_secret,
+	access_token_key: keys.access_token_key,
+	access_token_secret: keys.access_token_secret
+});
+
+var spotify = new Spotify({
+  	id: "3d5bc7f272674a28a6fc97f2cbf485df",
+  	secret: "3814db515d934e80afab3316aebeb266"
+});
 
 function processCommand(command, commandName){
 
@@ -25,7 +35,7 @@ function processCommand(command, commandName){
 			break;
 
 		case "spotify-this-song":
-			if (commandName != null){
+			if (commandName){
 				spotifyThis(commandName);
 			}
 			else{
@@ -34,7 +44,7 @@ function processCommand(command, commandName){
 			break;
 
 		case "movie-this":
-			if (commandName != null){
+			if (commandName){
 				movieThis(commandName);
 			}
 			else{
@@ -56,10 +66,12 @@ function tweets(){
 
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 	  	
+		console.log(error);
+
 	  	if (!error) {
 	    	for (var i = 0; i < tweets.length; i++){
 	    		console.log("");
-	    		console.log("Tweet: " + tweets[i],text);
+	    		console.log("Tweet: " + tweets[i].text);
 	    		console.log("");
 	    		console.log("Created: " + tweets[i].created_at);
 	    		console.log("");
@@ -73,7 +85,6 @@ function tweets(){
 }
 
 function spotifyThis(song){
-	
 	spotify.search({
 
 		type: 'track', 
@@ -97,13 +108,14 @@ function spotifyThis(song){
         console.log("");
 	  }
  
-	console.log(data); 
+	// console.log(data); 
 	});
 }
 
 function movieThis(movie){
 
-	var query = "http://www.omdbapi.com/?t=' + movie + '&plot=short&r=json&tomatoes=true";
+	var key = "trilogy";
+	var query = `http://www.omdbapi.com/?apikey=${key}&t=${commandName || defaultMovie}`;
 
 	request(query, function(error, response, body){
 
