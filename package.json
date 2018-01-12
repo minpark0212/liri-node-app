@@ -10,10 +10,20 @@
     "type": "git",
     "url": "git+https://github.com/minpark0212/liri-node-app.git"
   },
-  "author": "",
+  "author": "min park",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/minpark0212/liri-node-app/issues"
   },
-  "homepage": "https://github.com/minpark0212/liri-node-app#readme"
+  "homepage": "https://github.com/minpark0212/liri-node-app#readme",
+  "dependencies": {
+    "omdb": "^0.8.0",
+    "request": "^2.83.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "liri"
+  ]
 }
